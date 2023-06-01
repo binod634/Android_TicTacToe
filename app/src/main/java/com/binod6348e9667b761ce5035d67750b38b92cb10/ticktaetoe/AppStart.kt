@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -33,6 +34,7 @@ import com.binod6348e9667b761ce5035d67750b38b92cb10.ticktaetoe.ui.theme.customBa
 
 @Composable
 fun AppStart() {
+    val gameover by GameModel.uiState.collectAsState()
     Card(elevation = CardDefaults.cardElevation(8.dp)) {
         Box(
             modifier = Modifier
@@ -44,6 +46,12 @@ fun AppStart() {
                     .align(Alignment.Center)
                     .fillMaxWidth(0.9f)
             ) {
+
+                if (gameover.gameOver) {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Text(text = "Player ${GameModel.checkWon().name} Won !!!")
+                    }
+                }
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(3)
@@ -57,12 +65,23 @@ fun AppStart() {
                     }
                 }
                 Box(modifier = Modifier.fillMaxWidth()) {
+                    Button(
+                        onClick = { GameModel.resets() },
+//                        colors = ButtonDefaults.buttonColors(Color.Gray),
+                        modifier = Modifier.align(Alignment.Center)
+                    ) {
+                        Text(text = "Reset Game")
+                    }
+                }
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)) {
                     Text(
                         color = Color.Black,
                         text = "Sorry. Complete Feature is not implemented yet.",
-                        textAlign = TextAlign.Center)
+                        textAlign = TextAlign.Center
+                    )
                 }
-                    
             }
         }
     }
@@ -92,7 +111,7 @@ fun BoxModel(
                 modifier = Modifier.padding(5.dp)
             ) {
 //                when (GameModel.boardData[count / 3][count % 3]!!
-                when (some[count/3][count%3]) {
+                when (some.arr[count/3][count%3]) {
                     Player.First -> {
                         Icon(painterResource(id = R.drawable.circleweb), contentDescription = null, tint = Color.Red)
                     }
